@@ -18,9 +18,10 @@ class CreateMovementsTable extends Migration
             $table->unsignedBigInteger('category_id');
             $table->enum('type', ['R', 'D']);
             $table->text('description');
-            $table->timestamp('date');
+            $table->date('date');
             $table->unsignedInteger('value');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
             $table->softDeletes();
             $table->foreign('category_id')->references('id')->on('categories');
         });
