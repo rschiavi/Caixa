@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a5669dbb4e274f449d66914c9d62779a",
+    "content-hash": "c873d17fb5425d78bb6506e54a37a0a1",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -960,6 +960,29 @@
                 "php"
             ],
             "time": "2019-11-08T13:50:10+00:00"
+        },
+        {
+            "name": "noovem/money",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:noovem/money.git",
+                "reference": "db4c5a0799a68950f3908fc11546f6bc19d699ef"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Noovem\\Money\\": "src/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Luis Pozenato",
+                    "email": "poze@noovem.me"
+                }
+            ],
+            "description": "Library para dinheiro",
+            "time": "2019-03-20T17:29:22+00:00"
         },
         {
             "name": "opis/closure",
@@ -4940,7 +4963,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "noovem/money": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
