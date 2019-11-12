@@ -11,7 +11,7 @@
                     <li class="nav-item dropdown">
                         <select class="form-control" id="year">
                             @for ($i = 2018; $i <= date('Y')+1; $i++)
-                                @if ($selected_year == $i)
+                                @if ($selectedYear == $i)
                                     <option selected="selected">{{ $i }}</option>
                                 @else
                                     <option>{{ $i }}</option>
@@ -21,10 +21,10 @@
                     </li>
                     @for ($i = 1; $i <= 12; $i++)
                         <li class="nav-item">
-                            @if ($selected_month == $i)
-                                <a class="nav-link active" href="{{ url('?month='.$i.'&year='.$selected_year) }}">{{ $months[$i] }}</a>
+                            @if ($selectedMonth == $i)
+                                <a class="nav-link active" href="{{ url('?month='.$i.'&year='.$selectedYear) }}">{{ $monthList[$i] }}</a>
                             @else
-                                <a class="nav-link" href="{{ url('?month='.$i.'&year='.$selected_year) }}">{{ $months[$i] }}</a>
+                                <a class="nav-link" href="{{ url('?month='.$i.'&year='.$selectedYear) }}">{{ $monthList[$i] }}</a>
                             @endif
                         </li>
                     @endfor
@@ -32,7 +32,7 @@
             </div>
 
             <div class="alert alert-dark d-flex justify-content-between align-items-center">
-                <h4>{{ $month_name . '/' . $selected_year }}</h4>
+                <h4>{{ $monthName . '/' . $selectedYear }}</h4>
                 <span>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addMovement">Adicionar movimento</button>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCategory">Nova categoria</button>
@@ -46,15 +46,15 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item d-flex justify-content-between align-items-center text-success">
                                 <span>Receitas</span>
-                                <span>{{ Money::money($receitas, true) }}</span>
+                                <span>{{ Money::money($monthlyIncomes, true) }}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center text-danger">
                                 <span>Despesas</span>
-                                <span>{{ Money::money($despesas, true) }}</span>
+                                <span>{{ Money::money($monthlyExpenses, true) }}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
                                 <span>Total</span>
-                                <span>{{ Money::money($total, true) }}</span>
+                                <span>{{ Money::money($monthlyTotal, true) }}</span>
                             </li>
                         </ul>
                     </div>
@@ -66,27 +66,27 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item d-flex justify-content-between align-items-center text-success">
                                 <span>Receitas</span>
-                                <span>{{ Money::money($receitas, true) }}</span>
+                                <span>{{ Money::money($annualIncomes, true) }}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center text-danger">
                                 <span>Despesas</span>
-                                <span>{{ Money::money($despesas, true) }}</span>
+                                <span>{{ Money::money($annualExpenses, true) }}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold">
                                 <span>Total</span>
-                                <span>{{ Money::money($total, true) }}</span>
+                                <span>{{ Money::money($annualTotal, true) }}</span>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card mb-4">
                 <div class="card-header font-weight-bold">Movimentação do mês</div>
                 <div class="card-body">
                     <table class="table table-hover table-striped table-sm">
                         <tbody>
-                            @foreach ($movements as $movement)
+                            @foreach ($monthlyMovements as $movement)
                                 <tr>
                                     <td style="width: 50px;">{{ $movement->date->format('d') }}</td>
                                     <td>{{ '(' . $movement->category->name . ') ' . $movement->description }}</td>
@@ -101,14 +101,19 @@
                         <tfoot>
                             <tr>
                                 <th colspan="2"><h4>Total</h4></th>
-                                <th class="text-right"><h4>{{ Money::money($total, true) }}</h4></th>
+                                <th class="text-right"><h4>{{ Money::money($monthlyTotal, true) }}</h4></th>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
             </div>
-            {!! $chart->container() !!}
 
+            <div class="card mb-4">
+                <div class="card-header font-weight-bold">Receitas x Despesas (Anual)</div>
+                <div class="card-body">
+                    <canvas id="canvas" height="60"></canvas>
+                </div>
+            </div>
 
         </div>
     </div>
@@ -197,8 +202,47 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $('#year').change(function() {
-            window.location.href = "{!! url('?month='.$selected_month.'&year=') !!}" + $(this).val();
+            window.location.href = "{!! url('?month='.$selectedMonth.'&year=') !!}" + $(this).val();
         });
+
+        var ctx = document.getElementById("canvas").getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {!! $chart['labels']->toJson() !!},
+                datasets: [
+                    {
+                        label: 'Receitas',
+                        fill: false,
+                        data: {!! $chart['incomes']->toJson() !!},
+                        borderWidth: 2,
+                        borderColor: [
+                            'green'
+                        ],
+                    },
+                    {
+                        label: 'Despesas',
+                        fill: false,
+                        data: {!! $chart['expenses']->toJson() !!},
+                        borderWidth: 2,
+                        borderColor: [
+                            'red'
+                        ],
+                    }
+                ],
+                options: {
+					responsive: true,
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            }
+        });
+
     });
 </script>
 
