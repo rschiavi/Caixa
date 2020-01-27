@@ -124,50 +124,51 @@
 <div class="modal fade" id="addMovement" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Adicionar movimento</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form>
+            <form method="post" action="{{ url('movement') }}">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title">Adicionar movimento</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
                     <div class="form-row">
                         <div class="form-group custom-control custom-radio custom-control-inline">
-                            <input type="radio" checked="checked" id="customRadioInline1" name="customRadioInline1" class="custom-control-input">
-                            <label class="custom-control-label" for="customRadioInline1">Receita</label>
+                            <input type="radio" checked="checked" id="type_receita" name="type" class="custom-control-input" value="R">
+                            <label class="custom-control-label" for="type_receita">Receita</label>
                         </div>
                         <div class="form-group custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="customRadioInline2" name="customRadioInline1" class="custom-control-input">
-                            <label class="custom-control-label" for="customRadioInline2">Despesa</label>
+                            <input type="radio" id="type_despesa" name="type" class="custom-control-input" value="D">
+                            <label class="custom-control-label" for="type_despesa">Despesa</label>
                         </div>
                         <div class="form-group col-md-12">
-                            <label for="inputState">Categoria</label>
-                            <select id="inputState" class="form-control">
+                            <label for="category">Categoria</label>
+                            <select id="category" class="form-control" name="category">
                                 @foreach ($categories as $category)
-                                    <option>{{ $category->name }}</option>
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group col-md-12">
-                            <label for="inputAddress">Descrição</label>
-                            <input type="text" class="form-control" id="inputAddress">
+                            <label for="description">Descrição</label>
+                            <input type="text" class="form-control" id="description" name="description">
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="inputEmail4">Data</label>
-                            <input type="text" class="form-control" id="inputEmail4" value="{{ date('d/m/Y') }}">
+                            <label for="date">Data</label>
+                            <input type="text" class="form-control" id="date" name="date" value="{{ date('d/m/Y') }}">
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="inputPassword4">Valor</label>
-                            <input type="text" class="form-control" id="inputPassword4">
+                            <label for="value">Valor</label>
+                            <input type="text" class="form-control" id="value" name="value">
                         </div>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -175,26 +176,27 @@
 <div class="modal fade" id="addCategory" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Nova categoria</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form>
+            <form method="post" action="{{ url('category') }}">
+                @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title">Nova categoria</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
                     <div class="form-row">
                         <div class="form-group col-md-12">
-                            <label for="inputAddress">Nome</label>
-                            <input type="text" class="form-control" id="inputAddress">
+                            <label for="name">Nome</label>
+                            <input type="text" class="form-control" id="name" name="name">
                         </div>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

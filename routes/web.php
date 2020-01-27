@@ -17,4 +17,10 @@
 
 Auth::routes();
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::middleware('auth')->group(function () {
+
+    Route::get('/', 'HomeController@index')->name('home');
+    Route::post('category', 'CategoryController@store');
+    Route::post('movement', 'MovementController@store');
+
+});
