@@ -89,7 +89,7 @@
                             @foreach ($monthlyMovements as $movement)
                                 <tr>
                                     <td style="width: 50px;">{{ $movement->date->format('d') }}</td>
-                                    <td>{{ '(' . $movement->category->name . ') ' . $movement->description }}</td>
+                                    <td>{{ '(' . $movement->category->name . ') ' . $movement->description }} <i class="fas fa-edit"></i> <i class="fas fa-trash-alt"></i></td>
                                     @if ($movement->type === 'D')
                                         <td class="text-right text-danger">-{{ Money::money($movement->value, true) }}</td>
                                     @else
